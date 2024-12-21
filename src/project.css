@@ -1,0 +1,42 @@
+.project {
+	width: 100%;
+	padding: 5vw;
+	padding-bottom: 9em;
+	min-height: 100vh;
+	color: var(--color-line);
+}
+
+.project-title {
+	font-size: 2em;
+	margin-top: 0;
+	font-weight: 600;
+}
+
+.project-title:empty::before {
+	position: absolute;
+	content: "New project";
+	color: var(--color-line-empty);
+}
+
+.project .project-actions {
+	list-style-type: none;
+}
+
+.project-footer {
+	position: fixed;
+	background: var(--color-fill-offset-0);
+	border-top: 1px solid var(--color-separator-offset);
+	bottom: 0;
+	font-size: 2em;
+	padding-top: 0.25em;
+	padding-bottom: 0.25em;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: space-around;
+}
+
+.project-footer button {
+	font-size: 1em;
+	width: 4em;
+}

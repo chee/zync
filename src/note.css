@@ -1,0 +1,63 @@
+.milkdown {
+	width: 100%;
+}
+
+.ProseMirror-yjs-cursor {
+	position: absolute;
+	width: 4px;
+	height: 4px;
+	overflow: hidden;
+	border: 1px solid;
+	border-top-color: currentcolor;
+	border-right-color: currentcolor;
+	border-bottom-color: currentcolor;
+	border-left-color: currentcolor;
+	border-radius: 1em;
+	transform: translateY(0.5em);
+	display: none;
+}
+
+[data-milkdown-root] {
+	width: 100%;
+}
+
+[contenteditable] {
+	outline: 0 solid transparent;
+}
+
+.ProseMirror.pm--empty > p:only-child::before {
+	content: "Notes";
+	color: var(--color-line-empty);
+	position: absolute;
+}
+
+.ProseMirror.ProseMirror blockquote {
+	border-left: 4px solid var(--color-fill-theme);
+	padding-left: 1em;
+	margin-left: 0.5em;
+	padding-top: 0.125em;
+	padding-bottom: 0.1em;
+	font-family: sans-serif;
+	line-height: 1;
+	background: color-mix(in srgb, var(--color-fill-theme) 5%, var(--color-fill));
+}
+
+.ProseMirror :is(ul, ol) {
+	padding-left: 2ch;
+}
+.ProseMirror ul > li {
+	list-style-type: disc;
+}
+.ProseMirror li::marker {
+	color: var(--color-fill-theme);
+}
+
+.ProseMirror li p {
+	line-height: 1.2;
+	margin: 0.2em;
+}
+
+.ProseMirror h1 {
+	margin-bottom: 0.25em;
+	margin-top: 0.5em;
+}

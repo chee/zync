@@ -1,0 +1,76 @@
+.action {
+	display: flex;
+	flex-direction: column;
+	padding: 0.5em 0.75em;
+	border-radius: 8px;
+	min-height: 1em;
+
+	transition-property: background, min-height, margin, padding;
+	transition-duration: 0.24s;
+	color: var(--color-line);
+}
+
+.action[aria-current="true"]:not([aria-expanded="true"]) {
+	background: var(--color-fill-selected);
+}
+
+.action[aria-expanded="true"] {
+	min-height: 4em;
+	background: var(--color-fill);
+	border: 1px solid var(--color-separator-offset);
+	box-shadow: 0 2px 2px var(--color-shadow-offset);
+	margin-left: -0.25em;
+	margin-right: -0.25em;
+	padding: 1em;
+	margin-bottom: 2em;
+	margin-top: 1em;
+}
+
+.action:not([aria-expanded="true"]) {
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+
+.action:not([aria-expanded="true"]) .action-editor {
+	display: none;
+}
+
+.action-header {
+	display: flex;
+	gap: 1ex;
+	align-actions: center;
+}
+
+.action .item-title:empty:before {
+	content: "New action...";
+	color: var(--color-line-empty);
+}
+
+.action-title {
+	font-weight: 500;
+	display: inline-block;
+	width: 100%;
+	margin: 0;
+	font-size: 1rem;
+}
+
+.action-input {
+	font-weight: 500;
+	display: inline-block;
+	width: 100%;
+	margin: 0;
+	font-size: 1rem;
+}
+
+.action-input:focus {
+	outline: 0;
+}
+
+.action-footer {
+	display: none;
+}
+
+.action--done {
+	color: var(--color-line-empty);
+}
