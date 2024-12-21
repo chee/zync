@@ -79,7 +79,7 @@ export default function Action(props: {
 				props.current || props.select()
 				let doc = document.documentElement
 				doc.style.touchAction = "none"
-				sortable.dragActivators.onpointerdown?.(event)
+				props.expanded || sortable.dragActivators.onpointerdown?.(event)
 			}}
 			onpointerout={() => {
 				let doc = document.documentElement
