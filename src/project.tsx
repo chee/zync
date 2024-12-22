@@ -29,29 +29,10 @@ export default function Project(props: {url: Zync.ProjectId}) {
 	let listItemsElement: HTMLOListElement
 	const handle = useHandle<Zync.Project>(() => props.url)
 	const project = createDocumentStore(handle)
-	function setAppBadge() {
-		let checkboxes = listItemsElement?.querySelectorAll(
-			"input[type='checkbox']"
-		) as NodeListOf<HTMLInputElement>
-		let badge = Array.from(checkboxes || []).reduce(
-			(n, bx) => n + +!bx.checked,
-			0
-		)
-		navigator.setAppBadge?.(badge)
-	}
 	createEffect(() => {
 		document.title = project()?.title ?? "the zync up"
 		project()?.children.length
-		setAppBadge()
 	})
-	onMount(() => {
-		// lmao
-		setTimeout(() => {
-			setAppBadge()
-		}, 1000)
-		window.addEventListener("click", setAppBadge)
-	})
-
 	let [currentAction, setCurrentAction] = createSignal<Zync.ActionId | null>(
 		null
 	)
