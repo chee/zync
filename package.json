@@ -22,6 +22,7 @@
     "@solid-primitives/input-mask": "^0.2.2",
     "@solid-primitives/keyboard": "^1.2.8",
     "@solid-primitives/selection": "^0.0.8",
+    "@solid-primitives/timer": "^1.3.10",
     "@thisbeyond/solid-dnd": "^0.7.5",
     "automerge-repo-solid-primitives": "^1.1.3",
     "clsx": "^2.1.1",

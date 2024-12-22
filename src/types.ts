@@ -28,7 +28,7 @@ export namespace Zync {
 	}
 
 	export interface Doable {
-		state: "todo" | "done" | "canceled" | "waiting"
+		done?: false | Date
 		priority?: "!!!" | "!!" | "!"
 		// e.g. 2001-11-09 OR "someday"
 		when?: string
@@ -47,6 +47,7 @@ export namespace Zync {
 		type: "project"
 		tags: TagId[]
 		children: /*Heading|*/ ActionId[]
+		logbook: ActionId[]
 		// parent?: AreaId
 	}
 

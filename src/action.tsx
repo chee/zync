@@ -25,6 +25,7 @@ export default function Action(props: {
 	select: () => void
 	expand: () => void
 	collapse: (action: Zync.Action) => void
+	queueLogbookCleanup(): void
 }) {
 	const action = createDocumentStore(() => props.handle)
 
@@ -53,8 +54,9 @@ export default function Action(props: {
 	function toggle() {
 		if (!props.current) return
 		props.handle.change(item => {
-			item.state = item.state == "todo" ? "done" : "todo"
+			item.done = item.done instanceof Date ? false : new Date()
 		})
+		props.queueLogbookCleanup()
 	}
 
 	createShortcut(["Meta", "k"], toggle)
@@ -63,7 +65,7 @@ export default function Action(props: {
 	// const {onpointerdown, ...activators} = sortable.dragActivators
 	const activeActivators = () => (props.expanded ? {} : sortable.dragActivators)
 
-	const done = () => action()?.state == "done"
+	const done = () => action()?.done instanceof Date
 
 	return (
 		<Show when={props.handle}>

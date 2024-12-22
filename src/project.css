@@ -6,13 +6,22 @@
 	color: var(--color-line);
 }
 
+.project-title {
+	font-size: 1.6em;
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-weight: 700;
+	letter-spacing: -1px;
+}
+
 .project-filters {
 	display: flex;
 	font-size: 12px;
+	margin: 0.5rem 0;
 }
 
 .project-filters__filter {
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: 600;
 	color: #8f9196;
 	padding: 2px 8px;
@@ -27,14 +36,6 @@
 
 .project-filters__filter--all[aria-pressed="true"] {
 	--bg: #b7b9be;
-}
-
-.project-title {
-	font-size: 1.6em;
-	margin-top: 0;
-	margin-bottom: 0.25em;
-	font-weight: 700;
-	letter-spacing: -1px;
 }
 
 .project-title:empty::before {
@@ -64,4 +65,47 @@
 .project-footer button {
 	font-size: 1em;
 	width: 4em;
+}
+
+.logbook {
+	margin-top: 4rem;
+	font-size: 14px;
+}
+
+.logbook__trigger {
+	font-size: 14px;
+	padding: 2px 4px;
+	border-radius: 8px;
+	font-weight: 600;
+	color: var(--color-line-empty);
+}
+
+.log {
+	font-size: 14px;
+	display: flex;
+	gap: 1em;
+	margin-bottom: 2px;
+	place-items: center;
+	color: var(--color-line-empty);
+	text-decoration:;
+
+	time {
+		display: block;
+		font-size: 12px;
+		color: var(--color-fill-theme);
+	}
+}
+
+.log__delete {
+	padding: 0;
+	font-size: 1em;
+	font-weight: 400;
+	padding: 4px;
+	line-height: 1em;
+	&:hover {
+		background: #ee0050;
+		color: white;
+	}
+	margin-left: auto;
+	cursor: no-drop;
 }
