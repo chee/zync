@@ -5,6 +5,7 @@ import {defaultKeymap, history, historyKeymap} from "@codemirror/commands"
 import {automergeSyncPlugin} from "@automerge/automerge-codemirror"
 import {EditorState} from "@codemirror/state"
 import {onMount} from "solid-js"
+import {markdown, markdownLanguage} from "@codemirror/lang-markdown"
 
 export default function Editor(props: {
 	handle: DocHandle<Zync.Notable>
@@ -22,6 +23,10 @@ export default function Editor(props: {
 		parent: editor,
 		doc: props.handle.docSync()?.[props.field],
 		extensions: [
+			markdown({
+				base: markdownLanguage,
+				addKeymap: true,
+			}),
 			history(),
 			drawSelection(),
 			EditorView.theme({

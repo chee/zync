@@ -15,7 +15,7 @@ import {
 	createEffect,
 	createSignal,
 	For,
-	onMount,
+	mapArray,
 	Show,
 	Suspense,
 } from "solid-js"
@@ -29,6 +29,19 @@ export default function Project(props: {url: Zync.ProjectId}) {
 	let listItemsElement: HTMLOListElement
 	const handle = useHandle<Zync.Project>(() => props.url)
 	const project = createDocumentStore(handle)
+	const actions = mapArray(
+		() => project()?.children,
+		item => createDocumentStore(useHandle<Zync.Action>(() => item))
+	)
+
+	createEffect(() => {
+		const incomplete = actions().reduce(
+			(n, action) => n + Number(action()?.state != "done"),
+			0
+		)
+		navigator.setAppBadge?.(incomplete)
+	})
+
 	createEffect(() => {
 		document.title = project()?.title ?? "the zync up"
 		project()?.children.length
