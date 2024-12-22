@@ -10,17 +10,21 @@ import {
 } from "@thisbeyond/solid-dnd"
 import clsx from "clsx"
 
-import {ChangeFn, deleteAt, insertAt} from "@automerge/automerge-repo"
-import {createSignal, For, Suspense} from "solid-js"
+import {deleteAt, insertAt} from "@automerge/automerge-repo"
+import {createEffect, createSignal, For, Show, Suspense} from "solid-js"
 import {createAction} from "./zync.ts"
 
 import {createShortcut} from "@solid-primitives/keyboard"
+import Editor from "./editor.tsx"
+import {createDocumentStore, useHandle} from "automerge-repo-solid-primitives"
 
-export default function Project(props: {
-	url: Zync.ProjectId
-	project: Zync.Project
-	change: (fn: ChangeFn<Zync.Project>) => void
-}) {
+export default function Project(props: {url: Zync.ProjectId}) {
+	const handle = useHandle<Zync.Project>(() => props.url)
+	const project = createDocumentStore(handle)
+	createEffect(() => {
+		document.title = project()?.title ?? "the zync up"
+	})
+
 	let [currentAction, setCurrentAction] = createSignal<Zync.ActionId | null>(
 		null
 	)
@@ -28,8 +32,7 @@ export default function Project(props: {
 		null
 	)
 
-	const currentActionIndex = () =>
-		props.project.children.indexOf(currentAction()!)
+	const currentActionIndex = () => project()!.children.indexOf(currentAction()!)
 	// const expandedActionIndex = () =>
 	// props.project.children.indexOf(expandedAction()!)
 
@@ -62,7 +65,7 @@ export default function Project(props: {
 	function newItem() {
 		const action = createAction()
 		const url = window.repo.create(action).url as Zync.ActionId
-		props.change(project => {
+		handle()?.change(project => {
 			let index = currentActionIndex()
 			if (index == -1) {
 				index = project.children.length - 1
@@ -78,14 +81,14 @@ export default function Project(props: {
 	function select(inc: 1 | -1 = 1) {
 		const current = currentActionIndex()
 		const index = current == -1 ? 0 : current + inc
-		const next = props.project.children[index]
+		const next = project()?.children[index]
 		next && setCurrentAction(next)
 	}
 
 	function move(inc: 1 | -1 = 1) {
 		const current = currentActionIndex()
 		const index = current == -1 ? 0 : current + inc
-		props.change(project => {
+		handle()?.change(project => {
 			deleteAt(project.children, current)
 			insertAt(project.children, index, currentAction())
 		})
@@ -105,7 +108,7 @@ export default function Project(props: {
 		const current = currentActionIndex()
 		if (current == -1) return
 		select()
-		props.change(project => {
+		handle()?.change(project => {
 			deleteAt(project.children, current)
 		})
 	}
@@ -114,7 +117,7 @@ export default function Project(props: {
 		const {draggable, droppable} = event
 
 		if (droppable && draggable.id !== droppable.id) {
-			props.change(project => {
+			handle()?.change(project => {
 				const draggedIndex = Array.from(project.children).indexOf(draggable.id)
 				const droppedIndex = Array.from(project.children).indexOf(droppable.id)
 				deleteAt(project.children, draggedIndex)
@@ -124,61 +127,70 @@ export default function Project(props: {
 	}
 
 	return (
-		<DragDropProvider onDragEnd={handleDragEnd}>
-			<DragDropSensors />
+		<Show when={handle()}>
+			<DragDropProvider onDragEnd={handleDragEnd}>
+				<DragDropSensors />
 
-			<article
-				class={clsx(
-					"project",
-					expandedAction() && "project--with-expanded-item"
-				)}
-				onclick={event => {
-					if (!(event.target instanceof HTMLElement)) return
+				<article
+					class={clsx(
+						"project",
+						expandedAction() && "project--with-expanded-item"
+					)}
+					onclick={event => {
+						if (!(event.target instanceof HTMLElement)) return
 
-					if (!event.target.closest(".project-actions")) {
-						setExpandedAction(null)
-					}
-				}}
-			>
-				<h1 class="project-title">{props.project.title}</h1>
-				<article class="project-note">
-					{/* <textarea>{props.project.note}</textarea>*/}
+						if (!event.target.closest(".project-actions")) {
+							setExpandedAction(null)
+						}
+					}}
+				>
+					<h1 class="project-title">{project()?.title}</h1>
+					<article class="project-note">
+						<Suspense>
+							<Editor handle={handle()!} field="note" placeholder="Notes" />
+						</Suspense>
+					</article>
+					<SortableProvider ids={project()?.children}>
+						<ol class="project-actions" /* ref={listItemsElement}*/>
+							<For each={project()?.children}>
+								{url => {
+									return (
+										<Suspense>
+											<Action
+												url={url}
+												current={currentAction() == url}
+												expanded={expandedAction() == url}
+												select={() => {
+													setCurrentAction(url)
+													setExpandedAction(null)
+												}}
+												expand={() => {
+													setExpandedAction(url)
+												}}
+												collapse={(action: Zync.Action) => {
+													if (!action.note && !action.title) {
+														trash()
+													}
+													setExpandedAction(null)
+												}}
+											/>
+										</Suspense>
+									)
+								}}
+							</For>
+						</ol>
+					</SortableProvider>
+					<footer class="project-footer">
+						<button onClick={trash}>
+							-<span class="for-screenreaders">delete item</span>
+						</button>
+
+						<button onClick={() => newItem()}>
+							+<span class="for-screenreaders">new item</span>
+						</button>
+					</footer>
 				</article>
-				<SortableProvider ids={props.project.children}>
-					<ol class="project-actions" /* ref={listItemsElement}*/>
-						<For each={props.project.children}>
-							{url => {
-								return (
-									<Suspense>
-										<Action
-											url={url}
-											current={currentAction() == url}
-											expanded={expandedAction() == url}
-											select={() => {
-												setCurrentAction(url)
-												setExpandedAction(null)
-											}}
-											expand={() => {
-												setExpandedAction(url)
-											}}
-											collapse={() => setExpandedAction(null)}
-										/>
-									</Suspense>
-								)
-							}}
-						</For>
-					</ol>
-				</SortableProvider>
-				<footer class="project-footer">
-					<button onClick={trash}>
-						-<span class="for-screenreaders">delete item</span>
-					</button>
-
-					<button onClick={() => newItem()}>
-						+<span class="for-screenreaders">new item</span>
-					</button>
-				</footer>
-			</article>
-		</DragDropProvider>
+			</DragDropProvider>
+		</Show>
 	)
 }

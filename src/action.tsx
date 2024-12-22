@@ -1,16 +1,13 @@
 import type {Zync} from "./types.ts"
 import "./action.css"
 import clsx from "clsx"
-import Modmask from "./modmask"
 
 import {createSortable, transformStyle} from "@thisbeyond/solid-dnd"
-import {ChangeFn} from "@automerge/automerge-repo"
 import {createDocumentStore, useHandle} from "automerge-repo-solid-primitives"
 
-import {Match, onMount, Switch, untrack} from "solid-js"
+import {Match, Show, Switch} from "solid-js"
 import {createShortcut} from "@solid-primitives/keyboard"
-
-// import {Note} from "./note"
+import Editor from "./editor.tsx"
 
 let is = {
 	input(el: any): el is HTMLInputElement {
@@ -24,7 +21,7 @@ export default function Action(props: {
 	expanded: boolean
 	select: () => void
 	expand: () => void
-	collapse: () => void
+	collapse: (action: Zync.Action) => void
 }) {
 	const handle = useHandle<Zync.Action>(() => props.url)
 	const action = createDocumentStore(handle)
@@ -46,7 +43,7 @@ export default function Action(props: {
 	createShortcut(
 		["escape"],
 		() => {
-			props.collapse()
+			props.collapse(action()!)
 		},
 		{preventDefault: false}
 	)
@@ -107,7 +104,17 @@ export default function Action(props: {
 				tabindex={0}
 				id={props.url}
 			>
-				<header class="action-header">
+				<header
+					class="action-header"
+					onClick={() => {
+						props.current || props.select()
+					}}
+					onDblClick={() => {
+						if (!props.expanded) {
+							props.expand()
+						}
+					}}
+				>
 					<input
 						type="checkbox"
 						aria-describedby={`${props.url}-title`}
@@ -119,64 +126,73 @@ export default function Action(props: {
 							toggle()
 						}}
 					/>
-					<h2
-						onClick={() => {
-							props.current || props.select()
-						}}
-						onDblClick={() => {
-							if (!props.expanded) {
-								props.expand()
-							}
-						}}
-						id={`${props.url}-title`}
-						class="action-title"
-					>
+					<h2 id={`${props.url}-title`} class="action-title">
 						<Switch>
 							<Match when={props.expanded}>
-								<input
+								<Editor
+									oneline
 									placeholder="New action"
-									autocomplete="off"
-									class="action-input input"
-									name="title"
-									value={untrack(action)?.title}
-									autofocus
-									ref={input => {
-										onMount(() => {
-											input.focus()
-											input.selectionStart = input.selectionEnd =
-												input.value.length
+									handle={handle()!}
+									field="title"
+									blur={() => props.collapse(action()!)}
+									onMount={view => {
+										view.focus()
+										view.dispatch({
+											selection: {
+												head: view.state.doc.length,
+												anchor: view.state.doc.length,
+											},
 										})
-									}}
-									onKeyDown={event => {
-										let modmask = new Modmask(event)
-										if (event.key == "Enter" && modmask.none) {
-											event.stopImmediatePropagation()
-											event.stopPropagation()
-											event.preventDefault()
-											handle()!.change(action => {
-												if (!is.input(event.target)) return
-												action.title = event.target.value
-											})
-											props.collapse()
-										}
-										event.key == "Escape" && modmask.none && props.collapse()
 									}}
 								/>
 							</Match>
 							<Match when={!props.expanded}>{action()?.title}</Match>
 						</Switch>
 					</h2>
+					{/* todo extract indicators to its own component */}
+					<Show when={!props.expanded}>
+						<div class="action-indicators">
+							<Show when={action()?.note}>
+								<svg
+									fill="currentColor"
+									stroke-width="0"
+									xmlns="http://www.w3.org/2000/svg"
+									viewBox="0 0 512 512"
+									style="overflow: visible; color: currentcolor;"
+									height="1em"
+									width="1em"
+								>
+									<path
+										fill="none"
+										stroke="currentColor"
+										stroke-linejoin="round"
+										stroke-width="32"
+										d="M416 221.25V416a48 48 0 0 1-48 48H144a48 48 0 0 1-48-48V96a48 48 0 0 1 48-48h98.75a32 32 0 0 1 22.62 9.37l141.26 141.26a32 32 0 0 1 9.37 22.62Z"
+									></path>
+									<path
+										fill="none"
+										stroke="currentColor"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="32"
+										d="M256 56v120a32 32 0 0 0 32 32h120"
+									></path>
+								</svg>
+							</Show>
+						</div>
+					</Show>
 				</header>
 				<div class="action-editor">
-					<main
-						class="action-note"
-						onKeyDown={event => {
-							let modmask = new Modmask(event)
-
-							event.key == "Escape" && modmask.none && props.collapse()
-						}}
-					>
-						{/*props.expanded && <Note id={item.value.noteId} />*/}
+					<main class="action-note">
+						<Show when={props.expanded}>
+							<Editor
+								handle={handle()!}
+								field="note"
+								placeholder="Notes"
+								blur={() => props.collapse(action()!)}
+								onMount={view => view.contentDOM.scrollIntoView()}
+							/>
+						</Show>
 					</main>
 					<footer class="action-footer">
 						<div class="action-footer__info">

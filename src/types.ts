@@ -9,12 +9,12 @@ export namespace Zync {
 	export type TagId = AutomergeUrl & {tag: true}
 	export type PersonId = AutomergeUrl & {person: true}
 
-	interface Knowable {
+	export interface Knowable {
 		title: string
 		type: string
 	}
 
-	interface Notable extends Knowable {
+	export interface Notable extends Knowable {
 		note: string
 	}
 
@@ -27,7 +27,7 @@ export namespace Zync {
 		children: (ProjectId | ActionId)[]
 	}
 
-	interface Doable {
+	export interface Doable {
 		state: "todo" | "done" | "canceled" | "waiting"
 		priority?: "!!!" | "!!" | "!"
 		// e.g. 2001-11-09 OR "someday"

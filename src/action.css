@@ -39,7 +39,7 @@
 .action-header {
 	display: flex;
 	gap: 1ex;
-	align-actions: center;
+	align-items: center;
 }
 
 .action .item-title:empty:before {
@@ -50,9 +50,11 @@
 .action-title {
 	font-weight: 500;
 	display: inline-block;
-	width: 100%;
 	margin: 0;
 	font-size: 1rem;
+	.action--expanded & {
+		width: 100%;
+	}
 }
 
 .action-input {
@@ -73,4 +75,10 @@
 
 .action--done {
 	color: var(--color-line-empty);
+}
+
+.action-indicators {
+	color: var(--color-line-unobtrusive);
+	font-size: 0.8em;
+	margin-top: 4px;
 }

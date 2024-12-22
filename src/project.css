@@ -7,9 +7,11 @@
 }
 
 .project-title {
-	font-size: 2em;
+	font-size: 1.6em;
 	margin-top: 0;
-	font-weight: 600;
+	margin-bottom: 0.25em;
+	font-weight: 700;
+	letter-spacing: -1px;
 }
 
 .project-title:empty::before {

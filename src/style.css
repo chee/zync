@@ -50,10 +50,12 @@
 	--color-fill-selected: #cbe2ff;
 	--color-fill-theme: #1961c2;
 	--color-line-empty: #67696f;
+	--color-line-unobtrusive: #b7babe;
 	box-sizing: border-box;
 	/* overscroll-behavior: none; */
 	height: 100%;
 	line-height: 1.24;
+	scroll-behavior: smooth;
 }
 
 html,
