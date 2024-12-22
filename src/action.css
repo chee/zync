@@ -69,16 +69,45 @@
 	outline: 0;
 }
 
-.action-footer {
-	display: none;
-}
-
 .action--done {
 	color: var(--color-line-empty);
 }
 
 .action-indicators {
+	display: flex;
 	color: var(--color-line-unobtrusive);
 	font-size: 0.8em;
-	margin-top: 4px;
+
+	gap: 0.5em;
+}
+
+.action-footer {
+	display: flex;
+}
+
+.action-footer__buttons {
+	margin-left: auto;
+	display: flex;
+	gap: 1em;
+}
+
+.action-toggle {
+	font-size: 1.4em;
+	padding: 0.24em;
+	filter: saturate(0);
+	opacity: 0.25;
+	&:hover {
+		opacity: 0.5;
+		filter: saturate(0.5);
+	}
+	&[data-pressed] {
+		opacity: 1;
+		filter: saturate(1);
+	}
+}
+
+.action-toggle:hover {
+}
+
+.action-toggle[data-pressed] {
 }

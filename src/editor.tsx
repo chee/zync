@@ -19,6 +19,7 @@ export default function Editor(props: {
 	onMount?(view: EditorView): void
 }) {
 	const editor = (<div style={{width: "100%"}} />) as HTMLDivElement
+
 	const view = new EditorView({
 		parent: editor,
 		doc: props.handle.docSync()?.[props.field],

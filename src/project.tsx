@@ -8,9 +8,10 @@ import {
 	SortableProvider,
 	DragEvent,
 } from "@thisbeyond/solid-dnd"
+import {ToggleGroup} from "@kobalte/core/toggle-group"
 import clsx from "clsx"
 
-import {deleteAt, insertAt} from "@automerge/automerge-repo"
+import {deleteAt, DocHandle, insertAt} from "@automerge/automerge-repo"
 import {
 	createEffect,
 	createSignal,
@@ -31,12 +32,13 @@ export default function Project(props: {url: Zync.ProjectId}) {
 	const project = createDocumentStore(handle)
 	const actions = mapArray(
 		() => project()?.children,
-		item => createDocumentStore(useHandle<Zync.Action>(() => item))
+		item => useHandle<Zync.Action>(() => item)
 	)
+	const [filter, setFilter] = createSignal(null as "bird" | "rabbit" | null)
 
 	createEffect(() => {
 		const incomplete = actions().reduce(
-			(n, action) => n + Number(action()?.state != "done"),
+			(n, action) => n + Number(action()?.docSync()?.state != "done"),
 			0
 		)
 		navigator.setAppBadge?.(incomplete)
@@ -46,6 +48,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 		document.title = project()?.title ?? "the zync up"
 		project()?.children.length
 	})
+
 	let [currentAction, setCurrentAction] = createSignal<Zync.ActionId | null>(
 		null
 	)
@@ -147,11 +150,21 @@ export default function Project(props: {url: Zync.ProjectId}) {
 		}
 	}
 
+	function isFiltered(handle: DocHandle<Zync.Action>) {
+		if (filter() == "bird" && !handle.docSync()?.bird) {
+			return true
+		}
+		if (filter() == "rabbit" && !handle.docSync()?.rabbit) {
+			return true
+		}
+
+		return false
+	}
+
 	return (
 		<Show when={handle()}>
 			<DragDropProvider onDragEnd={handleDragEnd}>
 				<DragDropSensors />
-
 				<article
 					class={clsx(
 						"project",
@@ -166,6 +179,34 @@ export default function Project(props: {url: Zync.ProjectId}) {
 					}}
 				>
 					<h1 class="project-title">{project()?.title}</h1>
+					<ToggleGroup
+						class="project-filters"
+						value={filter()}
+						onChange={setFilter}
+					>
+						<button
+							class="project-filters__filter project-filters__filter--all"
+							aria-pressed={!filter()}
+							onclick={() => setFilter(null)}
+						>
+							all
+						</button>
+						<ToggleGroup.Item
+							class="project-filters__filter"
+							value="bird"
+							aria-label="bird"
+						>
+							🐦 bird
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							class="project-filters__filter"
+							value="rabbit"
+							aria-label="rabiit"
+						>
+							🐰 rabbit
+						</ToggleGroup.Item>
+					</ToggleGroup>
+
 					<article class="project-note">
 						<Suspense>
 							<Editor handle={handle()!} field="note" placeholder="Notes" />
@@ -173,28 +214,33 @@ export default function Project(props: {url: Zync.ProjectId}) {
 					</article>
 					<SortableProvider ids={project()?.children}>
 						<ol class="project-actions" ref={listItemsElement}>
-							<For each={project()?.children}>
-								{url => {
+							<For each={actions()}>
+								{actionHandle => {
+									const url = () => actionHandle()?.url as Zync.ActionId
 									return (
 										<Suspense>
-											<Action
-												url={url}
-												current={currentAction() == url}
-												expanded={expandedAction() == url}
-												select={() => {
-													setCurrentAction(url)
-													setExpandedAction(null)
-												}}
-												expand={() => {
-													setExpandedAction(url)
-												}}
-												collapse={(action: Zync.Action) => {
-													if (!action.note && !action.title) {
-														trash()
-													}
-													setExpandedAction(null)
-												}}
-											/>
+											<Show
+												when={actionHandle() && !isFiltered(actionHandle()!)}
+											>
+												<Action
+													handle={actionHandle()!}
+													current={currentAction() == url()}
+													expanded={expandedAction() == url()}
+													select={() => {
+														setCurrentAction(url())
+														setExpandedAction(null)
+													}}
+													expand={() => {
+														setExpandedAction(url())
+													}}
+													collapse={(action: Zync.Action) => {
+														if (!action.note && !action.title) {
+															trash()
+														}
+														setExpandedAction(null)
+													}}
+												/>
+											</Show>
 										</Suspense>
 									)
 								}}
