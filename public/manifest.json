@@ -5,17 +5,20 @@
 		{
 			"src": "/favicon.png",
 			"type": "image/png",
-			"sizes": "1024x1024"
+			"sizes": "1024x1024",
+			"purpose": "maskable"
 		},
 		{
 			"src": "/512.png",
 			"type": "image/png",
-			"sizes": "512x512"
+			"sizes": "512x512",
+			"purpose": "maskable"
 		},
 		{
 			"src": "/192.png",
 			"type": "image/png",
-			"sizes": "192x192"
+			"sizes": "192x192",
+			"purpose": "maskable"
 		}
 	],
 	"id": "/",
