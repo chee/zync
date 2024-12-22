@@ -11,7 +11,14 @@ import {
 import clsx from "clsx"
 
 import {deleteAt, insertAt} from "@automerge/automerge-repo"
-import {createEffect, createSignal, For, Show, Suspense} from "solid-js"
+import {
+	createEffect,
+	createSignal,
+	For,
+	onMount,
+	Show,
+	Suspense,
+} from "solid-js"
 import {createAction} from "./zync.ts"
 
 import {createShortcut} from "@solid-primitives/keyboard"
@@ -19,10 +26,30 @@ import Editor from "./editor.tsx"
 import {createDocumentStore, useHandle} from "automerge-repo-solid-primitives"
 
 export default function Project(props: {url: Zync.ProjectId}) {
+	let listItemsElement: HTMLOListElement
 	const handle = useHandle<Zync.Project>(() => props.url)
 	const project = createDocumentStore(handle)
+	function setAppBadge() {
+		let checkboxes = listItemsElement?.querySelectorAll(
+			"input[type='checkbox']"
+		) as NodeListOf<HTMLInputElement>
+		let badge = Array.from(checkboxes || []).reduce(
+			(n, bx) => n + +!bx.checked,
+			0
+		)
+		navigator.setAppBadge?.(badge)
+	}
 	createEffect(() => {
 		document.title = project()?.title ?? "the zync up"
+		project()?.children.length
+		setAppBadge()
+	})
+	onMount(() => {
+		// lmao
+		setTimeout(() => {
+			setAppBadge()
+		}, 1000)
+		window.addEventListener("click", setAppBadge)
 	})
 
 	let [currentAction, setCurrentAction] = createSignal<Zync.ActionId | null>(
@@ -151,7 +178,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 						</Suspense>
 					</article>
 					<SortableProvider ids={project()?.children}>
-						<ol class="project-actions" /* ref={listItemsElement}*/>
+						<ol class="project-actions" ref={listItemsElement}>
 							<For each={project()?.children}>
 								{url => {
 									return (

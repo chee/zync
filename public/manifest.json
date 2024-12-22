@@ -1,0 +1,28 @@
+{
+	"short_name": "zync",
+	"name": "zync",
+	"icons": [
+		{
+			"src": "/public/favicon.png",
+			"type": "image/png",
+			"sizes": "1024x1024"
+		},
+		{
+			"src": "/public/512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		},
+		{
+			"src": "/public/192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		}
+	],
+	"id": "/",
+	"start_url": "/",
+	"background_color": "#ffffff",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#1961c2",
+	"description": "shared tasks for birds and rabbits"
+}
