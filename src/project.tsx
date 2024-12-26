@@ -74,7 +74,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 
 	createEffect(() => {
 		const incomplete = actionHandles().reduce(
-			(n, action) => n + Number(action()?.docSync()?.done instanceof Date),
+			(n, action) => n + Number(!(action()?.docSync()?.done instanceof Date)),
 			0
 		)
 		navigator.setAppBadge?.(incomplete)
