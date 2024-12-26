@@ -46,6 +46,7 @@
 
 .project .project-actions {
 	list-style-type: none;
+	padding: 0;
 }
 
 .project-footer {
@@ -107,5 +108,5 @@
 		color: white;
 	}
 	margin-left: auto;
-	cursor: no-drop;
+	cursor:;
 }
