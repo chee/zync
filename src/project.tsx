@@ -45,7 +45,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 		() => project()?.logbook,
 		item => useHandle<Zync.Action>(() => item)
 	)
-	const [filter, setFilter] = createSignal(null as "bird" | "rabbit" | null)
+	const [filter, setFilter] = createSignal(null as "jake" | "kj" | null)
 	const [logbookOpen, setLogbookOpen] = createSignal(false)
 	const owner = getOwner()
 
@@ -187,10 +187,10 @@ export default function Project(props: {url: Zync.ProjectId}) {
 	}
 
 	function isFiltered(handle: DocHandle<Zync.Action>) {
-		if (filter() == "bird" && !handle.docSync()?.bird) {
+		if (filter() == "jake" && !handle.docSync()?.jake) {
 			return true
 		}
-		if (filter() == "rabbit" && !handle.docSync()?.rabbit) {
+		if (filter() == "kj" && !handle.docSync()?.kj) {
 			return true
 		}
 
@@ -216,34 +216,29 @@ export default function Project(props: {url: Zync.ProjectId}) {
 						if (!event.target.closest(".project-actions")) {
 							setExpandedAction(null)
 						}
-					}}
-				>
+					}}>
 					<h1 class="project-title">{project()?.title}</h1>
 					<ToggleGroup
 						class="project-filters"
 						value={filter()}
-						onChange={setFilter}
-					>
+						onChange={setFilter}>
 						<button
 							class="project-filters__filter project-filters__filter--all"
 							aria-pressed={!filter()}
-							onclick={() => setFilter(null)}
-						>
+							onclick={() => setFilter(null)}>
 							all
 						</button>
 						<ToggleGroup.Item
 							class="project-filters__filter"
-							value="bird"
-							aria-label="bird"
-						>
-							🐦 bird
+							value="jake"
+							aria-label="jake">
+							� jake
 						</ToggleGroup.Item>
 						<ToggleGroup.Item
 							class="project-filters__filter"
-							value="rabbit"
-							aria-label="rabiit"
-						>
-							🐰 rabbit
+							value="kj"
+							aria-label="rabiit">
+							� kj
 						</ToggleGroup.Item>
 					</ToggleGroup>
 
@@ -264,8 +259,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 									return (
 										<Suspense>
 											<Show
-												when={actionHandle() && !isFiltered(actionHandle()!)}
-											>
+												when={actionHandle() && !isFiltered(actionHandle()!)}>
 												<Action
 													handle={actionHandle()!}
 													current={currentAction() == url()}
@@ -297,8 +291,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 						<Collapsible
 							class="logbook"
 							open={logbookOpen()}
-							onOpenChange={open => setLogbookOpen(open)}
-						>
+							onOpenChange={open => setLogbookOpen(open)}>
 							<Collapsible.Trigger class="logbook__trigger">
 								<Switch>
 									<Match when={logbookOpen()}>hide</Match>
@@ -353,8 +346,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 																		deleteAt(project.logbook, index)
 																	}
 																})
-															}}
-														>
+															}}>
 															<svg
 																fill="currentColor"
 																stroke-width="0"
@@ -362,13 +354,11 @@ export default function Project(props: {url: Zync.ProjectId}) {
 																viewBox="0 0 512 512"
 																style="overflow: visible; color: currentcolor;"
 																height="1em"
-																width="1em"
-															>
+																width="1em">
 																<path
 																	fill="none"
 																	stroke="currentColor"
-																	d="M296 64h-80a7.91 7.91 0 0 0-8 8v24h96V72a7.91 7.91 0 0 0-8-8Z"
-																></path>
+																	d="M296 64h-80a7.91 7.91 0 0 0-8 8v24h96V72a7.91 7.91 0 0 0-8-8Z"></path>
 																<path d="M432 96h-96V72a40 40 0 0 0-40-40h-80a40 40 0 0 0-40 40v24H80a16 16 0 0 0 0 32h17l19 304.92c1.42 26.85 22 47.08 48 47.08h184c26.13 0 46.3-19.78 48-47l19-305h17a16 16 0 0 0 0-32ZM192.57 416H192a16 16 0 0 1-16-15.43l-8-224a16 16 0 1 1 32-1.14l8 224A16 16 0 0 1 192.57 416ZM272 400a16 16 0 0 1-32 0V176a16 16 0 0 1 32 0Zm32-304h-96V72a7.91 7.91 0 0 1 8-8h80a7.91 7.91 0 0 1 8 8Zm32 304.57A16 16 0 0 1 320 416h-.58A16 16 0 0 1 304 399.43l8-224a16 16 0 1 1 32 1.14Z"></path>
 															</svg>
 														</button>

@@ -39,8 +39,8 @@ export namespace Zync {
 		// you should put it in your calendar
 		// reminder?: number
 		period?: "morning" | "afternoon" | "evening"
-		bird: boolean
-		rabbit: boolean
+		jake: boolean
+		kj: boolean
 	}
 
 	export interface Project extends Notable, Doable {
