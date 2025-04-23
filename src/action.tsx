@@ -202,7 +202,7 @@ export default function Action(props: {
 							<div class="action-footer__buttons">
 								<ToggleButton
 									class="action-toggle"
-									aria-label="Mute"
+									aria-label="assign jake"
 									pressed={action()?.jake}
 									onChange={pressed => {
 										props.handle.change(action => (action.jake = pressed))
@@ -211,12 +211,12 @@ export default function Action(props: {
 								</ToggleButton>
 								<ToggleButton
 									class="action-toggle"
-									aria-label="Mute"
+									aria-label="assign kj"
 									pressed={action()?.kj}
 									onChange={pressed => {
 										props.handle.change(action => (action.kj = pressed))
 									}}>
-									{_state => "�‍⬛"}
+									{_state => "🐦‍⬛"}
 								</ToggleButton>
 							</div>
 						</footer>
