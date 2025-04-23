@@ -179,9 +179,9 @@ export default function Action(props: {
 											d="M256 56v120a32 32 0 0 0 32 32h120"></path>
 									</svg>
 								</Show>
-								<Show when={action()?.jake}>🔴</Show>
+								<Show when={action()?.jake}>☺️</Show>
 								<Show when={action()?.kj}>
-									<div>🔵</div>
+									<div>�‍⬛</div>
 								</Show>
 							</div>
 						</Show>
@@ -207,7 +207,7 @@ export default function Action(props: {
 									onChange={pressed => {
 										props.handle.change(action => (action.jake = pressed))
 									}}>
-									{_state => "🔴"}
+									{_state => "☺️"}
 								</ToggleButton>
 								<ToggleButton
 									class="action-toggle"
@@ -216,7 +216,7 @@ export default function Action(props: {
 									onChange={pressed => {
 										props.handle.change(action => (action.kj = pressed))
 									}}>
-									{_state => "🔵"}
+									{_state => "�‍⬛"}
 								</ToggleButton>
 							</div>
 						</footer>

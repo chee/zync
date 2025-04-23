@@ -232,13 +232,13 @@ export default function Project(props: {url: Zync.ProjectId}) {
 							class="project-filters__filter"
 							value="jake"
 							aria-label="jake">
-							� jake
+							☺️ jake
 						</ToggleGroup.Item>
 						<ToggleGroup.Item
 							class="project-filters__filter"
 							value="kj"
 							aria-label="rabiit">
-							� kj
+							🐦‍⬛ kj
 						</ToggleGroup.Item>
 					</ToggleGroup>
 
