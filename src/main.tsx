@@ -9,7 +9,7 @@ import Project from "./project"
 import {Suspense} from "solid-js"
 
 const defaultProjectURL =
-	"automerge:23k3mS8464t636dGjLC79NsnT44Z" as Zync.ProjectId
+	"automerge:3526g9kyTrave7Cp8QN8JS1fNoSk" as Zync.ProjectId
 
 export default function App() {
 	return (

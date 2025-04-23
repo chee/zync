@@ -37,6 +37,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 	let listItemsElement: HTMLOListElement
 	const projectHandle = useHandle<Zync.Project>(() => props.url)
 	const project = createDocumentStore(projectHandle)
+
 	const actionHandles = mapArray(
 		() => project()?.children,
 		item => useHandle<Zync.Action>(() => item)
@@ -45,6 +46,7 @@ export default function Project(props: {url: Zync.ProjectId}) {
 		() => project()?.logbook,
 		item => useHandle<Zync.Action>(() => item)
 	)
+
 	const [filter, setFilter] = createSignal(null as "jake" | "kj" | null)
 	const [logbookOpen, setLogbookOpen] = createSignal(false)
 	const owner = getOwner()
