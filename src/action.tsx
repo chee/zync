@@ -181,7 +181,7 @@ export default function Action(props: {
 								</Show>
 								<Show when={action()?.jake}>☺️</Show>
 								<Show when={action()?.kj}>
-									<div>�‍⬛</div>
+									<div>🐦‍⬛</div>
 								</Show>
 							</div>
 						</Show>
