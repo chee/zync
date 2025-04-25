@@ -45,7 +45,7 @@ export default async (request: Request, context: Context) => {
 		const sub = await store.get(targetSub.key, {type: "json"})
 		const subscriber = appServer.subscribe(sub)
 		await subscriber.pushTextMessage(
-			JSON.stringify({title: what, body: `from ${user}`}),
+			JSON.stringify({title: what, body: `by ${user}`}),
 			{}
 		)
 	}
