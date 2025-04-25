@@ -95,8 +95,7 @@ export default function Action(props: {
 					}
 				}}
 				onTouchEnd={event => delete event.target.ontouchmove}
-				tabindex={0}
-			>
+				tabindex={0}>
 				<article
 					class={clsx(
 						"action",
@@ -107,8 +106,7 @@ export default function Action(props: {
 					aria-current={props.current}
 					aria-expanded={props.expanded}
 					tabindex={0}
-					id={props.handle.url}
-				>
+					id={props.handle.url}>
 					<header
 						class="action-header"
 						onClick={() => {
@@ -118,8 +116,7 @@ export default function Action(props: {
 							if (!props.expanded) {
 								props.expand()
 							}
-						}}
-					>
+						}}>
 						<input
 							type="checkbox"
 							aria-describedby={`${props.handle.url}-title`}
@@ -166,23 +163,20 @@ export default function Action(props: {
 										viewBox="0 0 512 512"
 										style="overflow: visible; color: currentcolor; margin-top: 2px"
 										height="1em"
-										width="1em"
-									>
+										width="1em">
 										<path
 											fill="none"
 											stroke="currentColor"
 											stroke-linejoin="round"
 											stroke-width="32"
-											d="M416 221.25V416a48 48 0 0 1-48 48H144a48 48 0 0 1-48-48V96a48 48 0 0 1 48-48h98.75a32 32 0 0 1 22.62 9.37l141.26 141.26a32 32 0 0 1 9.37 22.62Z"
-										></path>
+											d="M416 221.25V416a48 48 0 0 1-48 48H144a48 48 0 0 1-48-48V96a48 48 0 0 1 48-48h98.75a32 32 0 0 1 22.62 9.37l141.26 141.26a32 32 0 0 1 9.37 22.62Z"></path>
 										<path
 											fill="none"
 											stroke="currentColor"
 											stroke-linecap="round"
 											stroke-linejoin="round"
 											stroke-width="32"
-											d="M256 56v120a32 32 0 0 0 32 32h120"
-										></path>
+											d="M256 56v120a32 32 0 0 0 32 32h120"></path>
 									</svg>
 								</Show>
 								<Show when={action()?.bird}>🐦</Show>
@@ -208,22 +202,42 @@ export default function Action(props: {
 							<div class="action-footer__buttons">
 								<ToggleButton
 									class="action-toggle"
-									aria-label="Mute"
+									aria-label="Assign to bird"
 									pressed={action()?.bird}
 									onChange={pressed => {
 										props.handle.change(action => (action.bird = pressed))
-									}}
-								>
+										const user = localStorage.getItem("user")
+										if (user != "bird") {
+											fetch("/push/tell", {
+												method: "POST",
+												body: JSON.stringify({
+													user,
+													target: "bird",
+													what: `you were assigned to ${action()?.title}`,
+												}),
+											})
+										}
+									}}>
 									{_state => "🐦"}
 								</ToggleButton>
 								<ToggleButton
 									class="action-toggle"
-									aria-label="Mute"
+									aria-label="Assign to rabbit"
 									pressed={action()?.rabbit}
 									onChange={pressed => {
 										props.handle.change(action => (action.rabbit = pressed))
-									}}
-								>
+										const user = localStorage.getItem("user")
+										if (user != "rabbit") {
+											fetch("/push/tell", {
+												method: "POST",
+												body: JSON.stringify({
+													user,
+													target: "rabbit",
+													what: `you were assigned to ${action()?.title}`,
+												}),
+											})
+										}
+									}}>
 									{_state => "🐰"}
 								</ToggleButton>
 							</div>
