@@ -207,7 +207,7 @@ export default function Action(props: {
 									onChange={pressed => {
 										props.handle.change(action => (action.bird = pressed))
 										const user = localStorage.getItem("user")
-										if (user != "bird") {
+										if (pressed && user != "bird") {
 											fetch("/push/tell", {
 												method: "POST",
 												body: JSON.stringify({
@@ -227,7 +227,7 @@ export default function Action(props: {
 									onChange={pressed => {
 										props.handle.change(action => (action.rabbit = pressed))
 										const user = localStorage.getItem("user")
-										if (user != "rabbit") {
+										if (pressed && user != "rabbit") {
 											fetch("/push/tell", {
 												method: "POST",
 												body: JSON.stringify({

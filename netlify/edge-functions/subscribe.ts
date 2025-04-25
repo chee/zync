@@ -38,17 +38,7 @@ export default async (request: Request, context: Context) => {
 		subscription.user + "/" + subscription.sub.endpoint,
 		subscription.sub
 	)
-	const appServer = await webpush.ApplicationServer.new({
-		contactInformation: "mailto:" + adminEmail,
-		vapidKeys,
-	})
-	const subscriber = appServer.subscribe(subscription.sub)
 
-	// Send notification.
-	await subscriber.pushTextMessage(
-		JSON.stringify({title: "notifications are enabled!", body: "hehe"}),
-		{}
-	)
 	return new Response(null, {status: 201})
 }
 
